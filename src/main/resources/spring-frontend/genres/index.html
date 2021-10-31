@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Жанры</title>
+    <meta name="description" content="Описание страницы">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Light.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Medium.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-ExtraBold.woff2" as="font" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/fonts.min.css?v=52263780">
+    <link rel="stylesheet" href="/assets/css/basic.min.css?v=52263780">
+    <link rel="stylesheet" href="/assets/css/extra.min.css?v=52263780">
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script defer src="/assets/js/scripts.min.js?v=52263780"></script>
+</head>
+<body class="Site">
+    <header class="Header" th:replace="~{fragments/common_header_fragment :: head(genres='menu-item menu-item_ACTIVE', status='unauthorized')}"></header>
+    <div class="Middle">
+        <div class="wrap">
+            <main class="Middle-main">
+                <h1 class="Middle-title" th:text="#{topbar.genres}">Жанры</h1>
+                <div class="Section">
+                    <div class="Tags Tags_genres">
+                        <div class="Tags" th:each="genreLevelOne : ${genres}">
+                            <div class="Tags-title">
+                                <div class="Tag">
+                                    <a href="/genres/slug.html" th:text="${genreLevelOne.getName()}">Жанр уровня 1 (заголовок)
+                                        <span class="undefined-amount">(15638)</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <span th:each="genreLevelTwo : ${genreLevelOne.getGenres()}">
+                                <div class="Tags" th:if="${!genreLevelTwo.getGenres().isEmpty()}">
+                                    <div class="Tags-title">
+                                        <div class="Tag">
+                                            <a href="/genres/slug.html" th:text="${genreLevelTwo.getName()}">Жанр уровня 2 (заголовок)
+                                                <span class="undefined-amount">(15638)</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <span th:each="genreLevelThree : ${genreLevelTwo.getGenres()}">
+                                        <div class="Tags" th:if="${!genreLevelThree.getGenres().isEmpty()}">
+                                            <div class="Tags-title">
+                                                <div class="Tag">
+                                                    <a href="/genres/slug.html" th:text="${genreLevelThree.getName()}">Жанр уровня 3 (заголовок)
+                                                        <span class="undefined-amount">(15638)</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="Tag" th:if="${genreLevelThree.getGenres().isEmpty()}">
+                                            <a href="/genres/slug.html" th:text="${genreLevelThree.getName()}">Жанр уровня 3 (обычный)
+                                                <span class="undefined-amount">(44333)</span>
+                                            </a>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="Tag" th:if="${genreLevelTwo.getGenres().isEmpty()}">
+                                    <a href="/genres/slug.html" th:text="${genreLevelTwo.getName()}">Жанр уровня 2 (обычный)
+                                        <span class="undefined-amount">(44333)</span>
+                                    </a>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <footer class="Footer" th:replace="~{fragments/common_footer_fragment :: footer}"></footer>
+    <script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
+</body>
+</html>
