@@ -1,14 +1,21 @@
 package com.example.MyBookShopApp.data;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "genres")
 public class Genre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String  name;
     private Integer parent_id;
     private Integer level;
 
+    @Transient
     private List<Genre> genres;
 
     public Integer getId() {

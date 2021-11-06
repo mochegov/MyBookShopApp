@@ -23,12 +23,22 @@ public class BookService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Book> getBooksData(Integer sign) {
-        String sqlGetAllBooks = "select * from books";
-        String sqlGetBookSignes = "select * from signsofbooks sb where sb.book_id = ";
-        String sqlGetBookDiscount = "select * from discounts d where d.book_id = ";
+    // Получить признаки книги
+    private List<Integer> getSigns(Book book) {
+        String sqlGetBookSignes = "select * from book_signes bs where bs.book_id = ";
 
+        List<Integer> signs = jdbcTemplate.query(sqlGetBookSignes + book.getId(),
+                (ResultSet rsSign, int rowNumSign) -> {
+                    return rsSign.getInt("sign_id");
+                });
+        return (signs);
+    }
+
+    public List<Book> getBooksData(Integer sign) {
         List<Book> resultBooksList;
+
+        String sqlGetAllBooks = "select * from books";
+        String sqlGetBookSignes = "select * from book_signes bs where bs.book_id = ";
 
         // Получаем все книги с признаками и скидками
         List<Book> books = jdbcTemplate.query(sqlGetAllBooks, (ResultSet rs, int rowNum) -> {
@@ -36,15 +46,12 @@ public class BookService {
             book.setId(rs.getInt("id"));
             book.setAuthor(rs.getString("author"));
             book.setTitle(rs.getString("title"));
-            book.setPriceOld(rs.getString("priceOld"));
-            book.setPrice(rs.getString("price"));
+            book.setPriceOld(rs.getInt("price_old"));
+            book.setPrice(rs.getInt("price"));
+            book.setDiscount(rs.getInt("discount"));
 
             // Получаем признаки книги
-            List<Integer> signs = jdbcTemplate.query(sqlGetBookSignes + book.getId(),
-                    (ResultSet rsSign, int rowNumSign) -> {
-                        return rsSign.getInt("signs_id");
-                    });
-            book.setSigns(new ArrayList<>(signs));
+            book.setSigns(new ArrayList<>(getSigns(book)));
 
             // Из признаков книги отдельно получаем признак "Бестселлер" для упрощения работы с шаблоном
             if (book.getSigns().contains(Integer.valueOf(4))) {
@@ -52,17 +59,6 @@ public class BookService {
             } else {
                 book.setBestseller(false);
             };
-
-            // Получаем скидки книги
-            List<Integer> discounts = jdbcTemplate.query(sqlGetBookDiscount + book.getId(),
-                    (ResultSet rsDiscount, int rowNumDiscount) -> {
-                        return rsDiscount.getInt("discount");
-                    });
-            if (!discounts.isEmpty()) {
-                book.setDiscount(discounts.get(0));
-            } else {
-                book.setDiscount(0);
-            }
 
             return book;
         });
@@ -77,56 +73,61 @@ public class BookService {
 
     // Получение списка книг с использованием SQL-запроса
     private List<Book> getBooksByQuery(String sql){
+
         List<Book> books = jdbcTemplate.query(sql, (ResultSet rs, int rowNum) -> {
             Book book = new Book();
             book.setId(rs.getInt("id"));
             book.setAuthor(rs.getString("author"));
             book.setTitle(rs.getString("title"));
-            book.setPriceOld(rs.getString("priceOld"));
-            book.setPrice(rs.getString("price"));
+            book.setPriceOld(rs.getInt("price_old"));
+            book.setPrice(rs.getInt("price"));
+            book.setDiscount(rs.getInt("discount"));
+
+            // Получаем признаки книги
+            book.setSigns(new ArrayList<>(getSigns(book)));
 
             return book;
         });
 
-        return new ArrayList<>(books);
+        return (new ArrayList<>(books));
     }
 
     // Получить отложенные книги пользователя
-    public List<Book> getPostponed(String user) {
+    public List<Book> getPostponed(User user) {
         String sqlGetPostponed = "select * from books b " +
-                                 "where exists (select 1 from postponed p " +
-                                               "where p.book_id = b.id " +
-                                                 "and p.user_name = '" + user + "')";
+                                 "where exists (select 1 from postoned_books pb, books_postoned_of_user bpu " +
+                                               "where pb.user_id = " + user.getId() + " " +
+                                                 "and bpu.postoned_books_id = pb.id " +
+                                                 "and bpu.book_id = b.id)";
 
         // Получаем отложенные книги пользователя
         return new ArrayList<>(getBooksByQuery(sqlGetPostponed));
     }
 
-    // Получить книги пользователя в корзине
-    public List<Book> getCart(String user) {
+    // Получить книги пользователя в его корзине
+    public List<Book> getCart(User user) {
         String sqlGetCart = "select * from books b " +
-                "where exists (select 1 from cart c " +
-                "where c.book_id = b.id " +
-                  "and c.user_name = '" + user + "')";
+                            "where exists (select 1 from carts c, books_in_cart bc " +
+                                          "where c.user_id = " + user.getId() + " " +
+                                           " and bc.cart_id = c.id " +
+                                           " and bc.book_id = b.id)";
 
         // Получаем отложенные книги пользователя
         return new ArrayList<>(getBooksByQuery(sqlGetCart));
     }
 
     // Подсчитывает общую стоимость списка книг
-    public String getTotalPrice(List<Book> bookList, Boolean oldPrice) {
-        BigDecimal priceTotal = new BigDecimal(0);
+    public Integer getTotalPrice(List<Book> bookList, Boolean oldPrice) {
+        Integer priceTotal = new Integer(0);
 
         for (Book book: bookList) {
             if (oldPrice) {
-                BigDecimal price = new BigDecimal(book.getPriceOld().substring(1));
-                priceTotal = priceTotal.add(price);
+                priceTotal = priceTotal + book.getPriceOld();
             } else {
-                BigDecimal price = new BigDecimal(book.getPrice().substring(1));
-                priceTotal = priceTotal.add(price);
+                priceTotal = priceTotal + book.getPrice();
             }
         }
 
-        return ("$" + String.valueOf(priceTotal));
+        return priceTotal;
     }
 }

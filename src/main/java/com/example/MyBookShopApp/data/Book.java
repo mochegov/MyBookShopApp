@@ -1,29 +1,39 @@
 package com.example.MyBookShopApp.data;
 
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
+@Entity
+@Table(name = "books")
 public class Book {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String author;
     private String title;
-    private String priceOld;
-    private String price;
-
-    private List<Integer> signs;
+    private Integer priceOld;
+    private Integer price;
     private Integer discount;
+
+    @Transient
     private Boolean bestseller;
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", author='" + author + '\'' +
-                ", title='" + title + '\'' +
-                ", priceOld='" + priceOld + '\'' +
-                ", price='" + price + '\'' +
-                '}';
-    }
+    @ManyToMany
+    @JoinTable(name = "books_in_cart", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "cart_id"))
+    private Set<Cart> carts;
+
+    @ManyToMany
+    @JoinTable(name = "books_postoned_of_user", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "postoned_books_id"))
+    private Set<PostonedBooks> postonedBooks;
+
+    @ManyToMany
+    @JoinTable(name = "book_signes", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "sign_id"))
+    private Set<Sign> signSet;
+
+    @Transient
+    private List<Integer> signs;
 
     public Integer getId() {
         return id;
@@ -49,20 +59,28 @@ public class Book {
         this.title = title;
     }
 
-    public String getPriceOld() {
+    public Integer getPriceOld() {
         return priceOld;
     }
 
-    public void setPriceOld(String priceOld) {
+    public void setPriceOld(Integer priceOld) {
         this.priceOld = priceOld;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Set<Sign> getSignSet() {
+        return signSet;
+    }
+
+    public void setSignSet(Set<Sign> signSet) {
+        this.signSet = signSet;
     }
 
     public List<Integer> getSigns() {
@@ -71,6 +89,22 @@ public class Book {
 
     public void setSigns(List<Integer> signs) {
         this.signs = signs;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public Set<PostonedBooks> getPostonedBooks() {
+        return postonedBooks;
+    }
+
+    public void setPostonedBooks(Set<PostonedBooks> postonedBooks) {
+        this.postonedBooks = postonedBooks;
     }
 
     public Integer getDiscount() {

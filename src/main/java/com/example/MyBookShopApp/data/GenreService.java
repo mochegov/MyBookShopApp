@@ -23,7 +23,7 @@ public class GenreService {
         List<Genre> genres = jdbcTemplate.query(sql, (ResultSet rs, int rowNum) -> {
             Genre genre = new Genre();
             genre.setId(rs.getInt("id"));
-            genre.setName(rs.getString("genre"));
+            genre.setName(rs.getString("name"));
             genre.setParent_id(rs.getInt("parent_id"));
             genre.setLevel(rs.getInt("level"));
 
