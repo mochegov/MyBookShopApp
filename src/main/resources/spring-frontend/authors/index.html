@@ -27,7 +27,7 @@
 
                         <div class="Authors-links">
                             <span th:each="letter : ${authorsMap.keySet()}">
-                                <a class="Authors-link" href="# + ${letter}" th:text="${letter}">А</a>
+                                <a class="Authors-link" th:href="'#' + ${letter}" th:text="${letter}">А</a>
                             </span>
                         </div>
 
@@ -38,7 +38,7 @@
                                 <div class="Authors-letter">
                                     <span th:each="author : ${authorsMap.get(letter)}">
                                         <div class="Authors-item">
-                                            <a href="/authors/slug" th:text="${author.getLastName() + ' ' + author.getFirstName()}">Абгарян Наринэ</a>
+                                            <a href="/authors/slug" th:text="${author.getName()}">Абгарян Наринэ</a>
                                         </div>
                                     </span>
                                 </div>

@@ -1,6 +1,6 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.data.BookService;
+import com.example.MyBookShopApp.data.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,7 @@ public class RecentController {
 
     @GetMapping("/books/recent")
     public String recentBookPage(Model model){
-        model.addAttribute("booksList", bookService.getBooksData(2));
+        model.addAttribute("booksList", bookService.getRecentBooks());
         return "books/recent";
     }
 }

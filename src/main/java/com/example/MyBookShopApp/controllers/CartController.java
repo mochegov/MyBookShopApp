@@ -1,8 +1,9 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.BookService;
-import com.example.MyBookShopApp.data.UserService;
+import com.example.MyBookShopApp.data.book.BookEntity;
+import com.example.MyBookShopApp.data.services.BookService;
+import com.example.MyBookShopApp.data.services.UserService;
+import com.example.MyBookShopApp.data.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +24,11 @@ public class CartController {
 
     @GetMapping("/cart")
     public String cartPage(Model model){
-        List<Book> bookList = bookService.getCart(userService.getUserByID(1));
-        model.addAttribute("booksList", bookList);
-        model.addAttribute("totalPrice", bookService.getTotalPrice(bookList, false));
-        model.addAttribute("totalOldPrice", bookService.getTotalPrice(bookList, true));
+        UserEntity userEntity = userService.getUserByID(1);
+        List<BookEntity> booksList = bookService.getCart(userEntity);
+        model.addAttribute("booksList", booksList);
+        model.addAttribute("totalPrice", bookService.getTotalPrice(booksList, false));
+        model.addAttribute("totalOldPrice", bookService.getTotalPrice(booksList, true));
 
         return "cart";
     }

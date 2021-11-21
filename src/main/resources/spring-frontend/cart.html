@@ -34,7 +34,7 @@
                         <div class="Cart-block Cart-block_row">
                             <div class="Cart-block Cart-block_info">
                                 <div class="Cart-author">
-                                    <a href="#" th:text="${book.getAuthor()}">Борис Васильевич Бедный</a>
+                                    <a href="#" th:text="${book.getAuthorName()}">Борис Васильевич Бедный</a>
                                 </div>
                                 <div class="Cart-title">
                                     <a href="#" th:text="${book.getTitle()}">Жизнь</a>
@@ -111,7 +111,7 @@
                             </div>
                             <div class="Cart-block Cart-block_price">
                                 <div class="Cart-priceTitle">Цена:</div>
-                                <div class="Cart-price Cart-price_old" th:text="${book.getPriceOld()}">150 р.</div>
+                                <div class="Cart-price Cart-price_old" th:if="${book.getDiscount() != 0}" th:text="${book.getOldPrice()}">150 р.</div>
                                 <div class="Cart-price" th:text="${book.getPrice()}">254 р.</div>
                             </div>
                         </div>

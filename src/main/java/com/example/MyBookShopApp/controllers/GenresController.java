@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.data.Genre;
-import com.example.MyBookShopApp.data.GenreService;
+import com.example.MyBookShopApp.data.genre.GenreEntity;
+import com.example.MyBookShopApp.data.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,9 @@ public class GenresController {
 
     @GetMapping("/genres")
     public String genresPage(Model model){
-        List<Genre> genres = genreService.getGenresData(0, 1);
+        List<GenreEntity> genres = genreService.getGenresData(0, 1);
+        //genreService.PrintGenres(genres);
+
         model.addAttribute("genres", genres);
 
         return "/genres/index";
