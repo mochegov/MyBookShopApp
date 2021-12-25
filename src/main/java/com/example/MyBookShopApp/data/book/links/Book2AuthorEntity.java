@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.data.book.links;
 
 import com.example.MyBookShopApp.data.author.AuthorEntity;
 import com.example.MyBookShopApp.data.book.BookEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 

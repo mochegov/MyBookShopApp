@@ -1,9 +1,12 @@
 package com.example.MyBookShopApp.data.genre;
 
+import com.example.MyBookShopApp.data.book.BookEntity;
 import com.example.MyBookShopApp.data.book.links.Book2GenreEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -27,6 +30,7 @@ public class GenreEntity {
 
     // Связь с таблицей, в которой содержатся связи книг и жанров
     @OneToMany(mappedBy = "genre")
+    @JsonIgnore
     private Set<Book2GenreEntity> book2GenreEntities;
 
     // Список дочерних жанров

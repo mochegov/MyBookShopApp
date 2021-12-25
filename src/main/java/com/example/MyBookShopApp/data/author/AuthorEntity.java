@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.data.author;
 
 import com.example.MyBookShopApp.data.book.links.Book2AuthorEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,8 +25,22 @@ public class AuthorEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @JsonIgnore
+    public String getPartDecription(Integer numPart){
+        String result;
+        if (numPart == 1) {
+            result = description.length() <= 1000 ? "[1] " + description : "[1] " + description.substring(0, 1000);
+        } else if (numPart == 2)  {
+            result = description.length() <= 1000 ? "[2] " : "[2] " + description.substring(1000);
+        } else {
+            result = "";
+        }
+        return result;
+    }
+
     // Связь с таблицей, в которой содержатся связи книг и авторов
     @OneToMany(mappedBy = "author")
+    @JsonIgnore
     private Set<Book2AuthorEntity> book2AuthorEntities;
 
     public Integer getId() {

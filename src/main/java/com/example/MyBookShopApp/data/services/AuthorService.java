@@ -39,4 +39,10 @@ public class AuthorService {
 
         return sortedAuthorsMap;
     }
+
+    // Получить автора по ID
+    public AuthorEntity getAuthorById(Integer id){
+        return authorRepository.getOne(id);
+    }
+
 }

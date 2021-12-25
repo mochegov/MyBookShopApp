@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div class="Cards Cards_refresh" th:fragment="pool">
+    <div class="Cards Cards_refresh" th:fragment="pool (category)">
 
         <div class="Card" th:each="book : ${booksList}">
             <div class="Card-picture">
                 <a href="#a" th:href="${book.getId()}">
-                    <img src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                    <img th:src="${book.getImage()}" alt="card.jpg"/>
                     <div class="Card-sale" th:if="${book.getDiscount() != 0}" th:text="${book.getDiscount() + '% скидка'}">30% скидка</div>
                     <div class="Card-ribbon" th:if="${book.isBestSeller()}">
                         <span class="Card-ribbonText">Бестселлер</span>
@@ -14,22 +14,71 @@
             </div>
             <div class="Card-content">
                 <strong class="Card-title">
-                    <a href="#" th:text="${book.getTitle()}"></a>
+                    <a href="#" th:text="${book.getTitle() + ' [' + book.getPubDateString() + ']'}"></a>
                 </strong>
                 <div class="Card-description" th:text="${book.getAuthorName()}"></div>
                 <div class="Card-cost">
-                    <span class="Card-priceOld" th:if="${book.getDiscount() != 0}" th:text="${book.getOldPrice()}">₽300.00</span>
-                    <span class="Card-price" th:text="${book.getPrice()}">₽190.00</span>
+                    <span class="Card-priceOld" th:if="${book.getDiscount() != 0}" th:text="${'₽' + book.getOldPrice()}">₽300.00</span>
+                    <span class="Card-price" th:text="${'₽' + book.getPrice()}">₽190.00</span>
                 </div>
             </div>
         </div>
 
-        <div class="Cards-footer Cards-footer_center">
+        <div th:if="${category == 'search'}" class="Cards-footer Cards-footer_center">
             <a class="btn btn_primary"
-               href="#" th:attr="data-refreshshow = ${category}"
-               data-refreshshow="recent"
-               data-refreshoffset="20"
-               data-refreshlimit="20">Показать еще</a>
+               href="#"
+               data-refreshshow="search"
+               th:attr="data-refreshquery = ${searchWordDto.example}"
+               data-refreshquery="Поисковый запрос"
+               data-refreshoffset="0"
+               data-refreshlimit="6">Показать еще</a>
         </div>
+
+        <div th:if="${category == 'recent'}" class="Cards-footer Cards-footer_center">
+            <a class="btn btn_primary"
+               href="#"
+               data-refreshshow="recent"
+               data-refreshoffset="0"
+               data-refreshlimit="6">Еще новинки</a>
+        </div>
+
+        <div th:if="${category == 'popular'}" class="Cards-footer Cards-footer_center">
+            <a class="btn btn_primary"
+               href="#"
+               data-refreshshow="popular"
+               data-refreshoffset="0"
+               data-refreshlimit="6">Еще популярные</a>
+        </div>
+
+        <div th:if="${category == 'genre'}" class="Cards-footer Cards-footer_center">
+            <a class="btn btn_primary"
+               href="#"
+               th:attr="data-refreshid = ${genre.getId()}"
+               data-refreshid="id"
+               data-refreshshow="genre"
+               data-refreshoffset="0"
+               data-refreshlimit="6">Еще книги по жанру</a>
+        </div>
+
+        <div th:if="${category == 'author'}" class="Cards-footer Cards-footer_center">
+            <a class="btn btn_primary"
+               href="#"
+               th:attr="data-refreshid = ${author.getId()}"
+               data-refreshid="id"
+               data-refreshshow="author"
+               data-refreshoffset="0"
+               data-refreshlimit="6">Еще книги автора</a>
+        </div>
+
+        <div th:if="${category == 'tag'}" class="Cards-footer Cards-footer_center">
+            <a class="btn btn_primary"
+               href="#"
+               th:attr="data-refreshid = ${tag.getId()}"
+               data-refreshid="id"
+               data-refreshshow="tag"
+               data-refreshoffset="0"
+               data-refreshlimit="6">Еще книги с этим тэгом</a>
+        </div>
+
     </div>
 </html>

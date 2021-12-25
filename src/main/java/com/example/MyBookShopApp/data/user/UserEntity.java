@@ -7,6 +7,7 @@ import com.example.MyBookShopApp.data.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.data.book.review.MessageEntity;
 import com.example.MyBookShopApp.data.payments.BalanceTransactionEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,30 +34,37 @@ public class UserEntity {
 
     // Связь с таблицей, в которой находится информация о загрузке книги
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<FileDownloadEntity> fileDownloadEntities;
 
     // Связь с таблицей, в которой находится информация о транзакциях пользователя
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<BalanceTransactionEntity> balanceTransactionEntities;
 
     // Связь с таблицей, в которой находятся отзовы о книгах, сделанных пользователями
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<BookReviewEntity> bookReviewEntities;
 
     // Связь с таблицей, в которой находятся сообщения, сделанные зарегистрированными и не зарегистрированными пользователями
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<MessageEntity> messageEntities;
 
     // Связь с таблицей, в которой находятся likes and unlikes, сделанные пользователями
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<BookReviewLikeEntity> bookReviewLikeEntities;
 
     // Связь с таблицей, в которой находится связь между книгами и пользователями
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Book2UserEntity> book2UserEntities;
 
     // Связь с таблицей, в которой находятся контракты пользователей
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<UserContactEntity> userContactEntities;
 
     public Integer getId() {

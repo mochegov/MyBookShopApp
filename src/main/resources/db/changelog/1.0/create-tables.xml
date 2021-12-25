@@ -66,6 +66,9 @@
             </column>
             <column name="image" type="varchar(255)"/>
             <column name="description" type="varchar(255)"/>
+            <column name="rating" type="numeric" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="create_table_users" author="Mochegov">
