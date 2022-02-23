@@ -21,11 +21,13 @@ public class BookService {
 
     private BookRepository bookRepository;
     private Book2UserTypeRepository book2UserTypeRepository;
+    private BookRatingsRepository bookRatingsRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository, Book2UserTypeRepository book2UserTypeRepository) {
+    public BookService(BookRepository bookRepository, Book2UserTypeRepository book2UserTypeRepository, BookRatingsRepository bookRatingsRepository) {
         this.bookRepository = bookRepository;
         this.book2UserTypeRepository = book2UserTypeRepository;
+        this.bookRatingsRepository = bookRatingsRepository;
     }
 
     // Получить экземпляр книги по ID
@@ -136,5 +138,15 @@ public class BookService {
     public Page<BookEntity> getPageOfBooksByTag(TagEntity tag, Integer offset, Integer limit){
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.getPageOfBooksByTagId(tag.getId(), nextPage);
+    }
+
+    // Получение списка книг по списку их ID
+    public List<BookEntity> getBooksByIdList(List<Integer> listId){
+        return bookRepository.getBookEntitiesByIdIn(listId);
+    }
+
+    // Добавить рейтинг книге
+    public void addRatingForBook(Integer Id){
+
     }
 }

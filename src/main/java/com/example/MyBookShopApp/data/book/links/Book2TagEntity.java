@@ -6,7 +6,7 @@ import com.example.MyBookShopApp.data.tags.TagEntity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "book2entity")
+@Table(name = "book2tags")
 public class Book2TagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class Book2TagEntity {
     private BookEntity book;
 
     @ManyToOne
-    @JoinColumn(name = "tag_id", columnDefinition = "INT NOT NULL")
+    @JoinColumn(name = "tags_id", columnDefinition = "INT NOT NULL")
     private TagEntity tag;
 
     public Integer getId() {

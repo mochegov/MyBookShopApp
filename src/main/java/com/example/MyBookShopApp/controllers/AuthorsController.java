@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.controllers;
 
+import com.example.MyBookShopApp.common.CommonUtils;
 import com.example.MyBookShopApp.data.author.AuthorEntity;
 import com.example.MyBookShopApp.data.dto.BooksPageDto;
 import com.example.MyBookShopApp.data.dto.SearchWordDto;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -36,23 +38,31 @@ public class AuthorsController {
     }
 
     @GetMapping("/authors")
-    public String authorsPage(){
+    public String authorsPage(HttpServletRequest request, Model model){
+        model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
         return "/authors/index";
     }
 
     @GetMapping("/authors/{id}")
-    public String authorsPage(@PathVariable(value = "id") Integer id, Model model){
+    public String authorsPage(@PathVariable(value = "id") Integer id,
+                              HttpServletRequest request,
+                              Model model){
         model.addAttribute("author", authorService.getAuthorById(id));
         model.addAttribute("authorBooks", bookService.getPageBooksByAuthor(authorService.getAuthorById(id), 0, 6).getContent());
         model.addAttribute("amountBooks", bookService.getCountBookByAuthor(authorService.getAuthorById(id)));
+        model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
+        model.addAttribute("countBooksPostponed", CommonUtils.getCountBooksInCookie(request, "postponedContents"));
 
         return "/authors/slug";
     }
 
     @GetMapping("/books/author/{id}")
-    public String booksAuthorPage(@PathVariable(value = "id") Integer id, Model model){
+    public String booksAuthorPage(@PathVariable(value = "id") Integer id,
+                                  HttpServletRequest request,
+                                  Model model){
         model.addAttribute("author", authorService.getAuthorById(id));
         model.addAttribute("booksList", bookService.getPageBooksByAuthor(authorService.getAuthorById(id), 0, 6).getContent());
+        model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
 
         return "/books/author";
     }

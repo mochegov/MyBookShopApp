@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.controllers;
 
+import com.example.MyBookShopApp.common.CommonUtils;
 import com.example.MyBookShopApp.data.dto.BooksPageDto;
 import com.example.MyBookShopApp.data.dto.GenreDto;
 import com.example.MyBookShopApp.data.dto.SearchWordDto;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +33,7 @@ public class GenresController {
     }
 
     @GetMapping("/genres")
-    public String genresPage(Model model){
+    public String genresPage(HttpServletRequest request, Model model){
         List<GenreEntity> genres = genreService.getGenresData(0, 1);
 
         // Информация о жанрах
@@ -40,14 +42,20 @@ public class GenresController {
         // Статистика по числу книг в каждом жанре
         model.addAttribute("fullGenresList", genreService.getBooksCountByGenres(genres));
 
+        model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
+
         return "/genres/index";
     }
 
     @GetMapping("/genre/{id}")
-    public String genrePage(@PathVariable("id") Integer id, Model model) {
+    public String genrePage(@PathVariable("id") Integer id,
+                            HttpServletRequest request,
+                            Model model) {
         GenreEntity genre = genreService.getGenryById(id);
         model.addAttribute("genre", new GenreDto(genre));
         model.addAttribute("booksList", bookService.getPageOfBooksByGenre(genre, 0, 6).getContent());
+        model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
+        model.addAttribute("countBooksPostponed", CommonUtils.getCountBooksInCookie(request, "postponedContents"));
 
         return "/genres/slug";
     }

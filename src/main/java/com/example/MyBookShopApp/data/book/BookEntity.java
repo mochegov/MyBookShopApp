@@ -1,18 +1,25 @@
 package com.example.MyBookShopApp.data.book;
 
+import com.example.MyBookShopApp.data.author.AuthorEntity;
+import com.example.MyBookShopApp.data.book.file.BookFileEntity;
 import com.example.MyBookShopApp.data.book.file.FileDownloadEntity;
 import com.example.MyBookShopApp.data.book.links.Book2AuthorEntity;
 import com.example.MyBookShopApp.data.book.links.Book2GenreEntity;
+import com.example.MyBookShopApp.data.book.links.Book2TagEntity;
 import com.example.MyBookShopApp.data.book.links.Book2UserEntity;
+import com.example.MyBookShopApp.data.book.review.BookRatingsEntity;
 import com.example.MyBookShopApp.data.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.payments.BalanceTransactionEntity;
+import com.example.MyBookShopApp.data.tags.TagEntity;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -90,6 +97,11 @@ public class BookEntity {
     @JsonIgnore
     private Set<Book2GenreEntity> book2GenreEntities;
 
+    // Связь с таблицей, в которой содержатся связи книг и тэгов
+    @OneToMany(mappedBy = "book")
+    @JsonIgnore
+    private Set<Book2TagEntity> book2TagEntities;
+
     // Связь с таблицей, в которой находится информация о транзакциях пользователя
     @OneToMany(mappedBy = "book")
     @JsonIgnore
@@ -105,10 +117,20 @@ public class BookEntity {
     @JsonIgnore
     private Set<Book2UserEntity> book2UserEntities;
 
+    // Связь с таблицей, в которой находится информация о файлах книг
+    @OneToMany(mappedBy = "book")
+    @JsonIgnore
+    private Set<BookFileEntity> bookFileEntities;
+
     // Связь с таблицей, в которой находится информация о загрузке книги
     @OneToMany(mappedBy = "book")
     @JsonIgnore
     private Set<FileDownloadEntity> fileDownloadEntities;
+
+    // Связь с таблицей, в которой находится информация о загрузке книги
+    @OneToMany(mappedBy = "book")
+    @JsonIgnore
+    private Set<BookRatingsEntity> bookRatingsEntities;
 
     // Получить имя автора книги
     @JsonGetter("authors")
@@ -120,6 +142,31 @@ public class BookEntity {
         }
 
         return authorName;
+    }
+
+    // Получить автора книги (если у книги несколько авторов, то возвращается самый первый)
+    @JsonIgnore
+    public AuthorEntity getAuthor(){
+        AuthorEntity author = null;
+
+        for (Book2AuthorEntity book2Author : this.getBook2AuthorEntities()) {
+            author = book2Author.getAuthor();
+            break;
+        }
+
+        return author;
+    }
+
+    // Получить список тэгов, связанных с книгой
+    @JsonIgnore
+    public List<TagEntity> getTagsByBook(){
+        List<TagEntity> tags = new ArrayList<>();
+
+        for (Book2TagEntity book2Tag : this.getBook2TagEntities()) {
+            tags.add(book2Tag.getTag());
+        }
+
+        return tags;
     }
 
     @JsonGetter("isBestseller")
@@ -287,5 +334,29 @@ public class BookEntity {
 
     public void setRating(BigDecimal rating) {
         this.rating = rating;
+    }
+
+    public Set<Book2TagEntity> getBook2TagEntities() {
+        return book2TagEntities;
+    }
+
+    public void setBook2TagEntities(Set<Book2TagEntity> book2TagEntities) {
+        this.book2TagEntities = book2TagEntities;
+    }
+
+    public Set<BookFileEntity> getBookFileEntities() {
+        return bookFileEntities;
+    }
+
+    public void setBookFileEntities(Set<BookFileEntity> bookFileEntities) {
+        this.bookFileEntities = bookFileEntities;
+    }
+
+    public Set<BookRatingsEntity> getBookRatingsEntities() {
+        return bookRatingsEntities;
+    }
+
+    public void setBookRatingsEntities(Set<BookRatingsEntity> bookRatingsEntities) {
+        this.bookRatingsEntities = bookRatingsEntities;
     }
 }

@@ -9,5 +9,7 @@
     <include file="db/changelog/1.0/create-tables-add.xml"/>
     <include file="db/changelog/data/initial-data.xml"/>
     <include file="db/changelog/data/init-data-add.xml"/>
+    <include file="db/changelog/1.0/create-tables-add2.xml"/>
     -->
+
 </databaseChangeLog>

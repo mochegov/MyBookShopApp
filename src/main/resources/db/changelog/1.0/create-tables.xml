@@ -250,11 +250,19 @@
             <column name="type_id" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="book_file"
                                  baseColumnNames="type_id"
                                  constraintName="book_file_type_fkey"
                                  referencedTableName="book_file_type"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book_file"
+                                 baseColumnNames="book_id"
+                                 constraintName="book_file_book_fkey"
+                                 referencedTableName="book"
                                  referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="create_table_file_download" author="Mochegov">

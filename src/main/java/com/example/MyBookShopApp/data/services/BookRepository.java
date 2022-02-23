@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<BookEntity, Integer> {
@@ -47,4 +48,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
     // Постраничный поиск книг, относящихся к определенному тэгу
     @Query(value = "select b.* from book b where exists (select 1 from book2tags b2t where b2t.book_id = b.id and b2t.tags_id = :tagId)", nativeQuery = true)
     Page<BookEntity> getPageOfBooksByTagId(@Param("tagId") Integer tagId, Pageable nextPage);
+
+    // Получение списка книг по массиву их ID
+    List<BookEntity> getBookEntitiesByIdIn(List<Integer> listId);
+
 }

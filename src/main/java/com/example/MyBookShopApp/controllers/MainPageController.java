@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.controllers;
 
+import com.example.MyBookShopApp.common.CommonUtils;
 import com.example.MyBookShopApp.data.dto.BooksPageDto;
 import com.example.MyBookShopApp.data.dto.SearchWordDto;
 import com.example.MyBookShopApp.data.book.BookEntity;
@@ -10,8 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Controller
 public class MainPageController {
@@ -33,11 +47,13 @@ public class MainPageController {
 
     // Главная страница
     @GetMapping("/")
-    public String mainPage(Model model){
+    public String mainPage(Model model, HttpServletRequest request){
         model.addAttribute("recommendedBooks", bookService.getPageOfRecommendedBooks(0, 6).getContent());
         model.addAttribute("recentBooks",      bookService.getPageOfRecentBooks(null,null, 0, 6).getContent());
         model.addAttribute("popularBooks",     bookService.getPopularBooks(0, 6).getContent());
         model.addAttribute("tagsList",         tagsService.getTagsList());
+        model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
+        model.addAttribute("countBooksPostponed", CommonUtils.getCountBooksInCookie(request, "postponedContents"));
 
         return "index";
     }

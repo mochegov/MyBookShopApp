@@ -4,7 +4,7 @@
 
         <div class="Card" th:each="book : ${booksList}">
             <div class="Card-picture">
-                <a href="#a" th:href="${book.getId()}">
+                <a th:href="@{/books/{id}(id=${book.getId()})}" >
                     <img th:src="${book.getImage()}" alt="card.jpg"/>
                     <div class="Card-sale" th:if="${book.getDiscount() != 0}" th:text="${book.getDiscount() + '% скидка'}">30% скидка</div>
                     <div class="Card-ribbon" th:if="${book.isBestSeller()}">
