@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/assets/css/fonts.min.css?v=04238027">
     <link rel="stylesheet" href="/assets/css/basic.min.css?v=04238027">
     <link rel="stylesheet" href="/assets/css/extra.min.css?v=04238027">
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>-->
     <script defer src="/assets/js/scripts.min.js?v=04238027"></script>
 </head>
 <body class="Site">
@@ -27,13 +27,13 @@
                     <div class="Cart-block Cart-block_row">
                         <div class="Cart-block Cart-block_pict">
                             <a class="Cart-pict" href="#">
-                                <img class="Cart-img" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                                <img class="Cart-img" th:src="${book.getImage()}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
                             </a>
                         </div>
                         <div class="Cart-block Cart-block_row">
                             <div class="Cart-block Cart-block_info">
                                 <div class="Cart-author">
-                                    <a href="#" th:text="${book.getAuthor()}">Борис Васильевич Бедный</a>
+                                    <a href="#" th:text="${book.getAuthorName()}">Борис Васильевич Бедный</a>
                                 </div>
                                 <div class="Cart-title">
                                     <a href="#" th:text="${book.getTitle()}">Жизнь</a>
@@ -91,7 +91,10 @@
                                 </div>
                                 <div class="Cart-buttons">
                                     <div class="Cart-btn">
-                                        <button class="btn btn_primary btn_outline" data-sendstatus="CART" data-bookid="[1122]">
+                                        <button class="btn btn_primary btn_outline"
+                                                data-sendstatus="CART"
+                                                th:attr="data-bookid = ${book.getId()}"
+                                                data-bookid="[1122]">
                                             <span class="btn-icon">
                                                 <img src="/assets/img/icons/shopping-basket.svg" alt="shopping-basket.svg"/>
                                             </span>
@@ -99,7 +102,10 @@
                                         </button>
                                     </div>
                                     <div class="Cart-btn">
-                                        <button class="btn btn_danger btn_outline" data-sendstatus="UNLINK" data-bookid="[1122]">
+                                        <button class="btn btn_danger btn_outline"
+                                                data-sendstatus="UNLINKPOST"
+                                                th:attr="data-bookid = ${book.getId()}"
+                                                data-bookid="[1122]">
                                             <span class="btn-icon">
                                                 <img src="/assets/img/icons/trash.svg" alt="trash.svg"/>
                                             </span>

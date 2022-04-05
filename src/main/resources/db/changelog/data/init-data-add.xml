@@ -1,0 +1,81 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="insert_into_author" author="Mochegov">
+        <insert tableName="author">
+            <column name="id" value="21"/>
+            <column name="name" value="Люси Мод Монтгомери"/>
+            <column name="slug" value="author21"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="22"/>
+            <column name="name" value="Ричард Адамс"/>
+            <column name="slug" value="author12"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="23"/>
+            <column name="name" value="Фрэнсис Скотт Фицджеральд"/>
+            <column name="slug" value="author23"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert_into_book" author="Mochegov">
+        <insert tableName="book">
+            <column name="id" value="21"/>
+            <column name="discount" value="5"/>
+            <column name="is_bestseller" value="1"/>
+            <column name="price" value="300"/>
+            <column name="pub_date" value="2020-09-17"/>
+            <column name="slug" value="book21"/>
+            <column name="title" value="Энн из Грингейблс"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="22"/>
+            <column name="discount" value="0"/>
+            <column name="is_bestseller" value="0"/>
+            <column name="price" value="400"/>
+            <column name="pub_date" value="2021-04-03"/>
+            <column name="slug" value="book22"/>
+            <column name="title" value="Обитатели холмов"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="23"/>
+            <column name="discount" value="10"/>
+            <column name="is_bestseller" value="0"/>
+            <column name="price" value="500"/>
+            <column name="pub_date" value="2021-01-20"/>
+            <column name="slug" value="book23"/>
+            <column name="title" value="Великий Гэтсби"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert_into_book2author" author="Mochegov">
+        <insert tableName="book2author">
+            <column name="book_id" value="21"/>
+            <column name="author_id" value="21"/>
+        </insert>
+        <insert tableName="book2author">
+            <column name="book_id" value="22"/>
+            <column name="author_id" value="22"/>
+        </insert>
+        <insert tableName="book2author">
+            <column name="book_id" value="23"/>
+            <column name="author_id" value="23"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert_into_book2genre" author="Mochegov">
+        <insert tableName="book2genre">
+            <column name="book_id" value="21"/>
+            <column name="genre_id" value="18"/>
+        </insert>
+        <insert tableName="book2genre">
+            <column name="book_id" value="22"/>
+            <column name="genre_id" value="14"/>
+        </insert>
+        <insert tableName="book2genre">
+            <column name="book_id" value="23"/>
+            <column name="genre_id" value="16"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

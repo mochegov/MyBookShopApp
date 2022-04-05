@@ -2,89 +2,104 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="reviewBlock">
     <div class="Comments">
-        <div class="Comment">
+
+        <div th:each="bookReviewEntry : ${reviewMapWithRatings.entrySet()}" class="Comment">
             <div class="Comment-column Comment-column_pict">
-                <div class="Comment-avatar">
-                </div>
+                <div class="Comment-avatar"></div>
             </div>
             <div class="Comment-column">
                 <header class="Comment-header">
                     <div>
-                        <strong class="Comment-title">Александр Кузнецов<span class="Comment-rating"><span
-                                class="Rating Rating_comment"><span class="Rating-stars"><span
-                                class="Rating-star Rating-star_view">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                <g>
-                                  <g>
-                                    <path fill="#ffc000"
-                                          d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                  </g>
-                                </g>
-                              </svg></span><span class="Rating-star Rating-star_view">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                <g>
-                                  <g>
-                                    <path fill="#ffc000"
-                                          d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                  </g>
-                                </g>
-                              </svg></span><span class="Rating-star">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                <g>
-                                  <g>
-                                    <path fill="#ffc000"
-                                          d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                  </g>
-                                </g>
-                              </svg></span><span class="Rating-star">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                <g>
-                                  <g>
-                                    <path fill="#ffc000"
-                                          d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                  </g>
-                                </g>
-                              </svg></span><span class="Rating-star">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                <g>
-                                  <g>
-                                    <path fill="#ffc000"
-                                          d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                  </g>
-                                </g>
-                              </svg></span></span></span></span>
-                        </strong><span class="Comment-date">17.04.2020 16:40</span>
+                        <strong class="Comment-title"
+                                th:text="${bookReviewEntry.getKey().getUser().getUserName() + ' [' + bookReviewEntry.getKey().getId() + ']'}">Александр Кузнецов
+                            <span class="Comment-rating">
+                                <span class="Rating Rating_comment">
+                                    <span class="Rating-stars">
+                                        <span class="Rating-star Rating-star_view">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                        <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span class="Rating-star Rating-star_view">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                        <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span class="Rating-star">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                        <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span class="Rating-star">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                        <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span class="Rating-star">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                        <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </span>
+                            </span>
+                        </strong>
+                        <span class="Comment-date" th:text="${bookReviewEntry.getKey().getTimeReview()}">17.04.2020 16:40</span>
                     </div>
                 </header>
                 <div class="Comment-content">
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula eget dolor.
-                        Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient montesti, nascetur
-                        ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem. Nulla consequat
-                        massa
-                        quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim
-                        justotuio,
-                        rhoncus ut loret, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
-                        pretium.
-                        Integer tincidunt. Cras dapibus. Vivamus element semper nisi. Aenean vulputate eleifend tellus.
-                        Aenean leo ligula, porttitor eu, consequat vitae.
-                    </p>
+                    <p th:text="${bookReviewEntry.getKey().getText()}">Я Александр Кузнецов и вот мой отзыв...</p>
                     <div class="Comment-footer">
                         <div class="Comment-appeal">
-                            <button class="btn btn_white btn_like" data-btntype="check" data-check="false"
-                                    data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img
-                                    src="/assets/img/icons/comment/like.svg" alt="like.svg"/></span><span
-                                    class="btn-content">200</span>
+                            <button class="btn btn_white btn_like"
+                                    data-btntype="check"
+                                    data-check="false"
+                                    data-btnradio="two2"
+                                    th:attr="data-likeid = ${bookReviewEntry.getKey().getId()}"
+                                    data-likeid="1111">
+                                <span class="btn-icon">
+                                    <img src="/assets/img/icons/comment/like.svg" alt="like.svg"/>
+                                </span>
+                                <span class="btn-content" th:text="${bookReviewEntry.getValue().getFirst()}">200</span>
                             </button>
-                            <button class="btn btn_white btn_dislike" data-btntype="check" data-check="false"
-                                    data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img
-                                    src="/assets/img/icons/comment/dislike.svg" alt="dislike.svg"/></span><span
-                                    class="btn-content">100</span>
+                            <button class="btn btn_white btn_dislike"
+                                    data-btntype="check"
+                                    data-check="false"
+                                    data-btnradio="two2"
+                                    th:attr="data-likeid = ${bookReviewEntry.getKey().getId()}"
+                                    data-likeid="1111">
+                                <span class="btn-icon">
+                                    <img src="/assets/img/icons/comment/dislike.svg" alt="dislike.svg"/>
+                                </span>
+                                <span class="btn-content" th:text="${bookReviewEntry.getValue().getSecond()}">100</span>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!--
         <div class="Comment">
             <div class="Comment-column Comment-column_pict">
                 <div class="Comment-avatar">
@@ -185,6 +200,8 @@
                 </div>
             </div>
         </div>
+        -->
+
     </div>
 </div>
 </html>

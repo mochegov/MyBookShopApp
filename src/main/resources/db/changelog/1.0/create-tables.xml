@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="create_table_author" author="Mochegov">
+        <createSequence sequenceName="author_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="author">
+            <column name="id" type="int" defaultValueSequenceNext="author_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="author_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slug" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo" type="varchar(255)"/>
+            <column name="description" type="text"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_genre" author="Mochegov">
+        <createSequence sequenceName="genre_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="genre">
+            <column name="id" type="int" defaultValueSequenceNext="genre_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="genre_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slug" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_book" author="Mochegov">
+        <createSequence sequenceName="book_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book">
+            <column name="id" type="int" defaultValueSequenceNext="book_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_pkey"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pub_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_bestseller" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slug" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="varchar(255)"/>
+            <column name="description" type="varchar(255)"/>
+            <column name="rating" type="numeric" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_users" author="Mochegov">
+        <createSequence sequenceName="users_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="users">
+            <column name="id" type="int" defaultValueSequenceNext="users_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hash" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reg_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_book2user_type" author="Mochegov">
+        <createSequence sequenceName="book2user_type_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book2user_type">
+            <column name="id" type="int" defaultValueSequenceNext="book2user_type_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2user_type_pkey"/>
+            </column>
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_book_file_type" author="Mochegov">
+        <createSequence sequenceName="book_file_type_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book_file_type">
+            <column name="id" type="int" defaultValueSequenceNext="book_file_type_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_file_type_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_book2author" author="Mochegov">
+        <createSequence sequenceName="book2author_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book2author">
+            <column name="id" type="int" defaultValueSequenceNext="book2author_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2author_pkey"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sort_index" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book2author"
+                                 baseColumnNames="book_id"
+                                 constraintName="book2author_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book2author"
+                                 baseColumnNames="author_id"
+                                 constraintName="book2author_author_fkey"
+                                 referencedTableName="author"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_book2genre" author="Mochegov">
+        <createSequence sequenceName="book2genre_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book2genre">
+            <column name="id" type="int" defaultValueSequenceNext="book2genre_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2genre_pkey"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="genre_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book2genre"
+                                 baseColumnNames="book_id"
+                                 constraintName="book2genre_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book2genre"
+                                 baseColumnNames="genre_id"
+                                 constraintName="book2genre_genre_fkey"
+                                 referencedTableName="genre"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_book2user" author="Mochegov">
+        <createSequence sequenceName="book2user_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book2user">
+            <column name="id" type="int" defaultValueSequenceNext="book2user_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2user_pkey"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book2user"
+                                 baseColumnNames="type_id"
+                                 constraintName="book2user_type_fkey"
+                                 referencedTableName="book2user_type"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book2user"
+                                 baseColumnNames="book_id"
+                                 constraintName="book2user_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book2user"
+                                 baseColumnNames="user_id"
+                                 constraintName="book2user_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_user_contact" author="Mochegov">
+        <createSequence sequenceName="user_contact_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="user_contact">
+            <column name="id" type="int" defaultValueSequenceNext="user_contact_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_contact_pkey"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="approved" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code_trails" type="int"/>
+            <column name="code_time" type="timestamp"/>
+            <column name="contact" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user_contact"
+                                 baseColumnNames="user_id"
+                                 constraintName="user_contact_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_book_file" author="Mochegov">
+        <createSequence sequenceName="book_file_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book_file">
+            <column name="id" type="int" defaultValueSequenceNext="book_file_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_file_pkey"/>
+            </column>
+            <column name="hash" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book_file"
+                                 baseColumnNames="type_id"
+                                 constraintName="book_file_type_fkey"
+                                 referencedTableName="book_file_type"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book_file"
+                                 baseColumnNames="book_id"
+                                 constraintName="book_file_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_file_download" author="Mochegov">
+        <createSequence sequenceName="file_download_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="file_download">
+            <column name="id" type="int" defaultValueSequenceNext="file_download_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="file_download_pkey"/>
+            </column>
+            <column name="count" type="int" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="file_download"
+                                 baseColumnNames="book_id"
+                                 constraintName="file_download_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="file_download"
+                                 baseColumnNames="user_id"
+                                 constraintName="file_download_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_book_review" author="Mochegov">
+        <createSequence sequenceName="book_review_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book_review">
+            <column name="id" type="int" defaultValueSequenceNext="book_review_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_review_pkey"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="book_review"
+                                 baseColumnNames="book_id"
+                                 constraintName="book_review_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book_review"
+                                 baseColumnNames="user_id"
+                                 constraintName="book_review_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_book_review_like" author="Mochegov">
+        <createSequence sequenceName="book_review_like_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book_review_like">
+            <column name="id" type="int" defaultValueSequenceNext="book_review_like_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_review_like_pkey"/>
+            </column>
+            <column name="review_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book_review_like"
+                                 baseColumnNames="user_id"
+                                 constraintName="book_review_like_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_message" author="Mochegov">
+        <createSequence sequenceName="message_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="message">
+            <column name="id" type="int" defaultValueSequenceNext="message_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="_pkey"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="user_id" type="int"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="message"
+                                 baseColumnNames="user_id"
+                                 constraintName="message_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_document" author="Mochegov">
+        <createSequence sequenceName="document_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="document">
+            <column name="id" type="int" defaultValueSequenceNext="document_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="document_pkey"/>
+            </column>
+            <column name="sort_index" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slug" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_faq" author="Mochegov">
+        <createSequence sequenceName="faq_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="faq">
+            <column name="id" type="int" defaultValueSequenceNext="faq_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="faq_pkey"/>
+            </column>
+            <column name="sort_index" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_balance_transaction" author="Mochegov">
+        <createSequence sequenceName="balance_transaction_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="balance_transaction">
+            <column name="id" type="int" defaultValueSequenceNext="balance_transaction_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="balance_transaction_pkey"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="int"/>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="balance_transaction"
+                                 baseColumnNames="book_id"
+                                 constraintName="balance_transaction_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="balance_transaction"
+                                 baseColumnNames="user_id"
+                                 constraintName="balance_transaction_user_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

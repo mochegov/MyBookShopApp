@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/assets/css/fonts.min.css?v=52263780">
     <link rel="stylesheet" href="/assets/css/basic.min.css?v=52263780">
     <link rel="stylesheet" href="/assets/css/extra.min.css?v=52263780">
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>-->
     <script defer src="/assets/js/scripts.min.js?v=52263780"></script>
 </head>
 <body class="Site">
@@ -27,43 +27,38 @@
                         <div class="Tags" th:each="genreLevelOne : ${genres}">
                             <div class="Tags-title">
                                 <div class="Tag">
-                                    <a href="/genres/slug.html" th:text="${genreLevelOne.getName()}">Жанр уровня 1 (заголовок)
-                                        <span class="undefined-amount">(15638)</span>
-                                    </a>
+                                    <a th:href="@{/genre/{id}(id=${genreLevelOne.getId()})}"
+                                       th:text="${genreLevelOne.getName() + ' (' + fullGenresList.get(genreLevelOne) + ')'}">Жанр уровня 1 (заголовок)</a>
                                 </div>
                             </div>
 
-                            <span th:each="genreLevelTwo : ${genreLevelOne.getGenres()}">
-                                <div class="Tags" th:if="${!genreLevelTwo.getGenres().isEmpty()}">
+                            <span th:each="genreLevelTwo : ${genreLevelOne.getChildGenres()}">
+                                <div class="Tags" th:if="${!genreLevelTwo.getChildGenres().isEmpty()}">
                                     <div class="Tags-title">
                                         <div class="Tag">
-                                            <a href="/genres/slug.html" th:text="${genreLevelTwo.getName()}">Жанр уровня 2 (заголовок)
-                                                <span class="undefined-amount">(15638)</span>
-                                            </a>
+                                            <a th:href="@{/genre/{id}(id=${genreLevelTwo.getId()})}"
+                                               th:text="${genreLevelTwo.getName() + ' (' + fullGenresList.get(genreLevelTwo) + ')'}">Жанр уровня 2 (заголовок)</a>
                                         </div>
                                     </div>
 
-                                    <span th:each="genreLevelThree : ${genreLevelTwo.getGenres()}">
-                                        <div class="Tags" th:if="${!genreLevelThree.getGenres().isEmpty()}">
+                                    <span th:each="genreLevelThree : ${genreLevelTwo.getChildGenres()}">
+                                        <div class="Tags" th:if="${!genreLevelThree.getChildGenres().isEmpty()}">
                                             <div class="Tags-title">
                                                 <div class="Tag">
-                                                    <a href="/genres/slug.html" th:text="${genreLevelThree.getName()}">Жанр уровня 3 (заголовок)
-                                                        <span class="undefined-amount">(15638)</span>
-                                                    </a>
+                                                    <a th:href="@{/genre/{id}(id=${genreLevelThree.getId()})}"
+                                                       th:text="${genreLevelThree.getName() + ' (' + fullGenresList.get(genreLevelThree) + ')'}">Жанр уровня 3 (заголовок)</a>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="Tag" th:if="${genreLevelThree.getGenres().isEmpty()}">
-                                            <a href="/genres/slug.html" th:text="${genreLevelThree.getName()}">Жанр уровня 3 (обычный)
-                                                <span class="undefined-amount">(44333)</span>
-                                            </a>
+                                        <div class="Tag" th:if="${genreLevelThree.getChildGenres().isEmpty()}">
+                                            <a th:href="@{/genre/{id}(id=${genreLevelThree.getId()})}"
+                                               th:text="${genreLevelThree.getName() + ' (' + fullGenresList.get(genreLevelThree) + ')'}">Жанр уровня 3 (обычный)</a>
                                         </div>
                                     </span>
                                 </div>
-                                <div class="Tag" th:if="${genreLevelTwo.getGenres().isEmpty()}">
-                                    <a href="/genres/slug.html" th:text="${genreLevelTwo.getName()}">Жанр уровня 2 (обычный)
-                                        <span class="undefined-amount">(44333)</span>
-                                    </a>
+                                <div class="Tag" th:if="${genreLevelTwo.getChildGenres().isEmpty()}">
+                                    <a th:href="@{/genre/{id}(id=${genreLevelTwo.getId()})}"
+                                       th:text="${genreLevelTwo.getName() + ' (' + fullGenresList.get(genreLevelTwo) + ')'}">Жанр уровня 2 (обычный)</a>
                                 </div>
                             </span>
                         </div>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="create_table_tags" author="Mochegov">
+        <createSequence sequenceName="tags_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="tags">
+            <column name="id" type="int" defaultValueSequenceNext="tags_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tags_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_book2tags" author="Mochegov">
+        <createSequence sequenceName="book2tags_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book2tags">
+            <column name="id" type="int" defaultValueSequenceNext="book2tags_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2tags_pkey"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tags_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sort_index" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book2tags"
+                                 baseColumnNames="book_id"
+                                 constraintName="book2tags_book_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="book2tags"
+                                 baseColumnNames="tags_id"
+                                 constraintName="book2tags_tags_fkey"
+                                 referencedTableName="tags"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

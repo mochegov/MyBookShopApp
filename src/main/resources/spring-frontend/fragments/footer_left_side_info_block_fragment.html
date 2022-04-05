@@ -5,7 +5,7 @@
         <img class="logo-image" src="/assets/img/logo_footer.png" alt="logo_footer.png"/>
         <span class="logo-text">BOOKSHOP</span>
     </a>
-    <p>Этот книжный магазин был разработан путём упорного труда Дмитрием Мочеговым. Честь ему и хвала!</p>
+    <p>Учебный проект студента SkillBox</p>
     <ul class="menu menu_img menu_smallImg Footer-menuSoc">
         <li class="menu-item">
             <a class="menu-link" href="#">
@@ -76,6 +76,12 @@
             <option value="en">English</option>
             <option value="ru">Русский</option>
         </select>
+    </p>
+
+    <p>
+        <form th:action="@{/updaterating}" method="post">
+            <input class="btn btn_primary" type="submit" value="Пересчитать рейтинги всех книг">
+        </form>
     </p>
 
 </div>

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/assets/css/fonts.min.css?v=64223515">
     <link rel="stylesheet" href="/assets/css/basic.min.css?v=64223515">
     <link rel="stylesheet" href="/assets/css/extra.min.css?v=64223515">
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>-->
     <script defer src="/assets/js/scripts.min.js?v=64223515"></script>
 </head>
 <body class="Site">
@@ -24,9 +24,9 @@
         <div class="wrap">
             <main class="Middle-main">
                 <div class="Section">
-                    <div th:replace="~{fragments/book_slider_fragment :: bookSlider(title=#{topbar.recomended}, booksList=${recommendedBooks})}"></div>
-                    <div th:replace="~{fragments/book_slider_fragment :: bookSlider(title=#{topbar.news}, booksList=${recentBooks})}"></div>
-                    <div th:replace="~{fragments/book_slider_fragment :: bookSlider(title=#{topbar.popular}, booksList=${popularBooks})}"></div>
+                    <div th:replace="~{fragments/book_slider_fragment :: bookSlider(type_fragment='recommended', title=#{topbar.recomended}, booksList=${recommendedBooks})}"></div>
+                    <div th:replace="~{fragments/book_slider_fragment :: bookSlider(type_fragment='recent', title=#{topbar.news}, booksList=${recentBooks})}"></div>
+                    <div th:replace="~{fragments/book_slider_fragment :: bookSlider(type_fragment='popular', title=#{topbar.popular}, booksList=${popularBooks})}"></div>
                 </div>
                 <h2 class="Middle-title" th:text="#{topbar.booksbytags}">Книги по тегам</h2>
                 <div class="Tags" id="tags" th:replace="~{fragments/tag_cloud_fragment :: cloud}"></div>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="create_table_book_ratings" author="Mochegov">
+        <createSequence sequenceName="book_ratings_id_seq" incrementBy="1" startValue="1000"/>
+        <createTable tableName="book_ratings">
+            <column name="id" type="int" defaultValueSequenceNext="book_ratings_id_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_ratings_pkey"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="book_ratings"
+                                 baseColumnNames="book_id"
+                                 constraintName="book2book_ratings_fkey"
+                                 referencedTableName="book"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

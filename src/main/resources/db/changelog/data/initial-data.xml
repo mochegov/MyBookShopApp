@@ -1,0 +1,78 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="Mochegov" id="load_author">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/author.csv" quotchar="&quot;" separator="," tableName="author">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="name" name="name" type="STRING"/>
+            <column header="slug" name="slug" type="STRING"/>
+            <column header="photo" name="photo" type="skip"/>
+            <column header="description" name="description" type="skip"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_genre">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/genre.csv" quotchar="&quot;" separator="," tableName="genre">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="name" name="name" type="STRING"/>
+            <column header="parent_id" name="parent_id" type="NUMERIC"/>
+            <column header="level" name="level" type="NUMERIC"/>
+            <column header="slug" name="slug" type="STRING"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_book">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/book.csv" quotchar="&quot;" separator="," tableName="book">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="title" name="title" type="STRING"/>
+            <column header="pub_date" name="pub_date" type="DATE"/>
+            <column header="price" name="price" type="NUMERIC"/>
+            <column header="discount" name="discount" type="NUMERIC"/>
+            <column header="is_bestseller" name="is_bestseller" type="NUMERIC"/>
+            <column header="slug" name="slug" type="STRING"/>
+            <column header="image" name="image" type="skip"/>
+            <column header="description" name="description" type="STRING"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_users">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/users.csv" quotchar="&quot;" separator="," tableName="users">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="name" name="name" type="STRING"/>
+            <column header="hash" name="hash" type="STRING"/>
+            <column header="reg_time" name="reg_time" type="DATE"/>
+            <column header="balance" name="balance" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_book2user_type">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/book2user_type.csv" quotchar="&quot;" separator="," tableName="book2user_type">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="code" name="code" type="STRING"/>
+            <column header="name" name="name" type="STRING"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_book2author">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/book2author.csv" quotchar="&quot;" separator="," tableName="book2author">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="book_id" name="book_id" type="NUMERIC"/>
+            <column header="author_id" name="author_id" type="NUMERIC"/>
+            <column header="sort_index" name="sort_index" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_book2genre">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/book2genre.csv" quotchar="&quot;" separator="," tableName="book2genre">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="book_id" name="book_id" type="NUMERIC"/>
+            <column header="genre_id" name="genre_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="Mochegov" id="load_book2user">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/data/book2user.csv" quotchar="&quot;" separator="," tableName="book2user">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="time" name="time" type="DATE"/>
+            <column header="type_id" name="type_id" type="NUMERIC"/>
+            <column header="book_id" name="book_id" type="NUMERIC"/>
+            <column header="user_id" name="user_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
