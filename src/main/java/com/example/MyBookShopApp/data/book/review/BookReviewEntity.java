@@ -4,11 +4,15 @@ import com.example.MyBookShopApp.data.book.BookEntity;
 import com.example.MyBookShopApp.data.user.UserEntity;
 
 import javax.persistence.*;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "book_review")
 public class BookReviewEntity {
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -65,5 +69,9 @@ public class BookReviewEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public String getTimeReview(){
+        return dateTimeFormatter.format(this.getTime());
     }
 }

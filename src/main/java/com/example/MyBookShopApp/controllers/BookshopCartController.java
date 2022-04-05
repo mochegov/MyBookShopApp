@@ -3,21 +3,21 @@ package com.example.MyBookShopApp.controllers;
 import com.example.MyBookShopApp.common.CommonUtils;
 import com.example.MyBookShopApp.data.book.BookEntity;
 import com.example.MyBookShopApp.data.dto.SearchWordDto;
+import com.example.MyBookShopApp.data.services.BookRatingsService;
 import com.example.MyBookShopApp.data.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -25,10 +25,12 @@ import java.util.stream.Collectors;
 public class BookshopCartController {
 
     private final BookService bookService;
+    private final BookRatingsService bookRatingsService;
 
     @Autowired
-    public BookshopCartController(BookService bookService) {
+    public BookshopCartController(BookService bookService, BookRatingsService bookRatingsService) {
         this.bookService = bookService;
+        this.bookRatingsService = bookRatingsService;
     }
 
     @ModelAttribute(name = "bookCart")
@@ -61,6 +63,15 @@ public class BookshopCartController {
             model.addAttribute("isCartEmpty", false);
             model.addAttribute("totalPrice",    bookService.getTotalPrice(booksList, false));
             model.addAttribute("totalOldPrice", bookService.getTotalPrice(booksList, true));
+
+            Map<BookEntity, List<Boolean>> resultRatingsMap = booksList.stream()
+                    .collect(Collectors.toMap(Function.identity(), book -> {
+                        List<Integer> ratingsOfBook = bookRatingsService.getRatingsOfBook(book);
+                        List<Boolean> resultRatings = bookRatingsService.getResultOfRatings(bookRatingsService.getAvgRatingOfBook(ratingsOfBook));
+                        return resultRatings;
+                    }));
+
+            model.addAttribute("resultRatingsMap", resultRatingsMap);
         }
 
         model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));

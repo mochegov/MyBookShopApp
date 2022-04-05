@@ -78,7 +78,7 @@ public class CommonUtils {
         }
     }
 
-    // Удалает из Cookie книгу
+    // Удаляет из Cookie книгу
     public static Boolean removeBookFromCookie(HttpServletRequest request,
                                                HttpServletResponse response,
                                                String cookieName,

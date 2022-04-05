@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -21,13 +23,11 @@ public class BookService {
 
     private BookRepository bookRepository;
     private Book2UserTypeRepository book2UserTypeRepository;
-    private BookRatingsRepository bookRatingsRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository, Book2UserTypeRepository book2UserTypeRepository, BookRatingsRepository bookRatingsRepository) {
+    public BookService(BookRepository bookRepository, Book2UserTypeRepository book2UserTypeRepository) {
         this.bookRepository = bookRepository;
         this.book2UserTypeRepository = book2UserTypeRepository;
-        this.bookRatingsRepository = bookRatingsRepository;
     }
 
     // Получить экземпляр книги по ID
@@ -99,7 +99,7 @@ public class BookService {
 
     // Подсчитывает общую стоимость списка книг
     public Integer getTotalPrice(List<BookEntity> bookList, Boolean oldPrice) {
-        Integer priceTotal = new Integer(0);
+        Integer priceTotal = 0;
 
         for (BookEntity book: bookList) {
             if (oldPrice) {
@@ -143,10 +143,5 @@ public class BookService {
     // Получение списка книг по списку их ID
     public List<BookEntity> getBooksByIdList(List<Integer> listId){
         return bookRepository.getBookEntitiesByIdIn(listId);
-    }
-
-    // Добавить рейтинг книге
-    public void addRatingForBook(Integer Id){
-
     }
 }

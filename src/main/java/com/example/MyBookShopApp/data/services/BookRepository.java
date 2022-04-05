@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<BookEntity, Integer> {
@@ -51,5 +50,4 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
     // Получение списка книг по массиву их ID
     List<BookEntity> getBookEntitiesByIdIn(List<Integer> listId);
-
 }

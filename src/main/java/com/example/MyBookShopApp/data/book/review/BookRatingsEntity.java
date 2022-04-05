@@ -22,6 +22,9 @@ public class BookRatingsEntity {
     @Column(columnDefinition = "SMALLINT NOT NULL")
     private Short rating;
 
+    public BookRatingsEntity() {
+    }
+
     public Integer getId() {
         return id;
     }

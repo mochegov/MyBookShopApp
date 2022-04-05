@@ -162,4 +162,9 @@ public class UserEntity {
     public void setUserContactEntities(Set<UserContactEntity> userContactEntities) {
         this.userContactEntities = userContactEntities;
     }
+
+    public String getUserName(){
+        return this.getHash() + " " + this.getName();
+    }
+
 }

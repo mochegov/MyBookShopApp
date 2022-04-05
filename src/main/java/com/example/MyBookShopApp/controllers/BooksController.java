@@ -3,12 +3,14 @@ package com.example.MyBookShopApp.controllers;
 import com.example.MyBookShopApp.common.CommonUtils;
 import com.example.MyBookShopApp.data.ResourceStorage;
 import com.example.MyBookShopApp.data.book.BookEntity;
+import com.example.MyBookShopApp.data.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.dto.ChangeBookStatusDto;
 import com.example.MyBookShopApp.data.dto.SearchWordDto;
-import com.example.MyBookShopApp.data.services.BookRepository;
-import com.example.MyBookShopApp.data.services.BookService;
+import com.example.MyBookShopApp.data.services.*;
+import com.example.MyBookShopApp.data.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 @Controller
@@ -28,12 +33,23 @@ public class BooksController {
     private final BookService bookService;
     private final ResourceStorage resourceStorage;
     private final BookRepository bookRepository;
+    private final BookRatingsService bookRatingsService;
+    private final BookReviewService bookReviewService;
+    private final BookReviewLikeService bookReviewLikeService;
+    private final UserService userService;
+
 
     @Autowired
-    public BooksController(BookService bookService, ResourceStorage resourceStorage, BookRepository bookRepository) {
+    public BooksController(BookService bookService, ResourceStorage resourceStorage, BookRepository bookRepository,
+                           BookRatingsService bookRatingsService, BookReviewService bookReviewService,
+                           BookReviewLikeService bookReviewLikeService, UserService userService) {
         this.bookService = bookService;
         this.resourceStorage = resourceStorage;
         this.bookRepository = bookRepository;
+        this.bookRatingsService = bookRatingsService;
+        this.bookReviewService = bookReviewService;
+        this.bookReviewLikeService = bookReviewLikeService;
+        this.userService = userService;
     }
 
     @ModelAttribute("searchWordDto")
@@ -55,7 +71,24 @@ public class BooksController {
         model.addAttribute("tags", book.getTagsByBook());
         model.addAttribute("countBooksInCart", CommonUtils.getCountBooksInCookie(request, "cartContents"));
         model.addAttribute("countBooksPostponed", CommonUtils.getCountBooksInCookie(request, "postponedContents"));
-        return "/books/slug";
+
+        List<Integer> resultRatings = bookRatingsService.getRatingsOfBook(book);
+        model.addAttribute("ratingsOfBook", resultRatings);
+        model.addAttribute("totalRating", bookRatingsService.getTotalRatingOfBook(resultRatings));
+        model.addAttribute("resultRatings", bookRatingsService.getResultOfRatings(bookRatingsService.getAvgRatingOfBook(resultRatings)));
+        model.addAttribute("reviewList", bookReviewService.getBookReviewByBook(book));
+
+        Map<BookReviewEntity, Pair<Long, Long>> bookReviewPairMap = bookReviewService.getReviewMapWithRatingsByBook(book);
+        List<Boolean> resultReviewRatings = bookReviewService.getResultReviewRatings(bookReviewPairMap);
+        model.addAttribute("reviewMapWithRatings", bookReviewPairMap);
+        model.addAttribute("resultReviewRatings", resultReviewRatings);
+
+        //for (Map.Entry <BookReviewEntity, Pair<Long, Long>> bookReviewPairEntry : bookReviewPairMap.entrySet()) {
+        //    bookReviewPairEntry.getValue().getSecond()
+        //}
+
+        //return "/books/slug";
+        return "/books/slugmy";
     }
 
     // Обработка запроса на сохранение обложки книги
@@ -87,6 +120,47 @@ public class BooksController {
                 .contentType(mediaType)
                 .contentLength(data.length)
                 .body(new ByteArrayResource(data));
+    }
+
+    @PostMapping("/bookReview")
+    @ResponseBody
+    public ChangeBookStatusDto handleNewComment(HttpServletRequest request) {
+        Logger.getLogger(this.getClass().getName()).info("Создание нового комментария для книги...");
+        String bookId = request.getParameter("bookId");
+        String text = request.getParameter("text");
+        Logger.getLogger(this.getClass().getName()).info("bookId: " + bookId + ", text: " + text);
+
+        if ((bookId != null) && !bookId.equals("") && (text != null) && !text.equals("") ) {
+            // Определены параметры
+            Random random = new Random();
+            BookEntity book = bookService.getBookById(Integer.valueOf(bookId));
+            UserEntity user = userService.getUserByID(Integer.valueOf(random.nextInt(4) + 1));
+            bookReviewService.addNewReview(book, user, text);
+            return new ChangeBookStatusDto(true, "");
+        } else {
+            return new ChangeBookStatusDto(false, "Некорректные параметры для создания отзыва");
+        }
+    }
+
+    @PostMapping("/rateBookReview")
+    @ResponseBody
+    public ChangeBookStatusDto handleNewReviewLike(HttpServletRequest request) {
+        Logger.getLogger(this.getClass().getName()).info("Создание нового like для комментария");
+        String reviewid = request.getParameter("reviewid");
+        String value = request.getParameter("value");
+        Logger.getLogger(this.getClass().getName()).info("reviewid: " + reviewid + ", value: " + value);
+
+        if ((reviewid != null) && !reviewid.equals("") && (value != null) && !value.equals("") ) {
+            // Определены параметры
+            Random random = new Random();
+            BookReviewEntity bookReview = bookReviewService.getBookReviewById(Integer.valueOf(reviewid));
+            UserEntity user = userService.getUserByID(Integer.valueOf(random.nextInt(4) + 1));
+            bookReviewLikeService.addNewBookReviewLike(bookReview, user, Short.valueOf(value));
+
+            return new ChangeBookStatusDto(true, "");
+        } else {
+            return new ChangeBookStatusDto(false, "Некорректные параметры для создания like для комментария");
+        }
     }
 
     // Изменение статуса книги
@@ -143,10 +217,11 @@ public class BooksController {
                                                       Model model) {
 
         Integer bookId = Integer.valueOf(request.getParameter("bookId"));
-        Integer value = Integer.valueOf(request.getParameter("value"));
-        Logger.getLogger(this.getClass().getName()).info("Установка рейтинга: " + value + " для книги id: " + bookId);
+        Short rating = Short.valueOf(request.getParameter("value"));
+        Logger.getLogger(this.getClass().getName()).info("Установка рейтинга: " + rating + " для книги id: " + bookId);
 
-
+        BookEntity book = bookService.getBookById(bookId);
+        bookRatingsService.addRatingForBook(book, rating);
 
         return new ChangeBookStatusDto(true, "");
     }
